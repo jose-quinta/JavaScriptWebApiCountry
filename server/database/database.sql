@@ -1,0 +1,39 @@
+CREATE DATABASE jswebapicountry;
+USE jswebapicountry;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+-- create tables
+CREATE TABLE `country` (
+    `id` INT(11) UNSIGNED NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `province` (
+    `id` INT(11) UNSIGNED NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `id_country` INT(11) UNSIGNED NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- add key's
+ALTER TABLE `country` ADD PRIMARY KEY (`id`);
+ALTER TABLE `province` ADD PRIMARY KEY (`id`);
+
+-- modify id's
+ALTER TABLE
+    `country` MODIFY `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE
+    `province` MODIFY `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+-- add constraint's
+ALTER TABLE `province`
+    ADD CONSTRAINT `province_ibfk_1` FOREIGN KEY (`id_country`) REFERENCES `country` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+CREATE USER 'js'@'localhost' IDENTIFIED BY 'js';
+GRANT ALL PRIVILEGES ON jswebapicountry.* TO 'js'@'localhost';
+FLUSH PRIVILEGES;
